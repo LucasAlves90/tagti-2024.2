@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+
+    <h1>Avaliações dos Clientes</h1>
+
+    <!-- Formulário de Avaliação -->
+    <form method="POST" action="/avaliacoes">
+        <label for="cliente">Seu Nome:</label><br>
+        <input type="text" id="cliente" name="cliente" required><br><br>
+
+        <label for="estrelas">Nota (1 a 5):</label><br>
+        <select id="estrelas" name="estrelas" required>
+            <option value="1">1 Estrela</option>
+            <option value="2">2 Estrelas</option>
+            <option value="3">3 Estrelas</option>
+            <option value="4">4 Estrelas</option>
+            <option value="5">5 Estrelas</option>
+        </select><br><br>
+
+        <label for="comentario">Comentário (opcional):</label><br>
+        <textarea id="comentario" name="comentario" rows="4"></textarea><br><br>
+
+        <button type="submit">Enviar Avaliação</button>
+    </form>
+
+    <!-- Exibição de Avaliações -->
+    <h2>O que nossos clientes dizem:</h2>
+    {% if avaliacoes %}
+        <ul>
+        {% for avaliacao in avaliacoes %}
+            <li>
+                <strong>{{ avaliacao.cliente }}</strong> - 
+                {{ '★' * avaliacao.estrelas }}<br>
+                <em>{{ avaliacao.comentario or 'Sem comentário' }}</em>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Ainda não há avaliações. Seja o primeiro a avaliar!</p>
+    {% endif %}
+
+    <!-- Mensagem Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+{% endblock %}
+
